@@ -1,4 +1,4 @@
-# 🏆 Final Practical Assessment: Internetworking Protocols (DKB2332)
+# Final Practical Assessment: Internetworking Protocols (DKB2332)
 ### 🎓 Diploma in Information Technology — Cyber City College (Perfect Completion Score: 66/66)
 
 ---
