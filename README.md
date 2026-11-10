@@ -1,50 +1,66 @@
-# 🏆 Multi-Switch VLAN Segmentation & VTP Configuration
-### Diploma Networking Practical Examination (Amali) — 100% Perfect Score (66/66)
+# 🏆 Final Practical Assessment: Internetworking Protocols (DKB2332)
+### 🎓 Diploma in Information Technology — Cyber City College (Perfect Completion Score: 66/66)
 
 ---
 
-## 📊 1. Network Topology Diagram
-Below is the verified network architecture designed in Cisco Packet Tracer.
+## 📌 1. Project Overview
+This repository contains the configuration work for the Final Practical Assessment of the **DKB2332 Internetworking Protocols** course. The objective of this project was to design and deploy a scalable enterprise network infrastructure to connect two (2) newly constructed building blocks with the main Administration Office for Cyber City College.
+
+The network implements **Variable Length Subnet Mask (VLSM)** layout algorithms starting from a base network pool of `192.168.0.0/24` alongside **VLAN Segmentation** and **VLAN Trunking Protocol (VTP)** frameworks to minimize broadcast domains and optimize intra-organizational traffic flow.
+
+---
+
+## 📊 2. Network Topology Diagram
+Below is the verified enterprise network architectural layout designed and fully simulated using Cisco Packet Tracer:
 
 ![Network Topology Diagram](topology.png)
 
 ---
 
-## 📝 2. System Documentation & Design Specifications
+## 📝 3. System Documentation & Design Specifications
 
-This network uses a hierarchical design across three main switch blocks to isolate traffic broadcast domains and manage subnets efficiently.
+### 🧮 A. IPv4 Network Addressing Plan (VLSM Subnetting)
+The subnetwork constraints were precisely budgeted based on the specific host scale requirements for each structural department:
+* **Information Technology Department (VLAN 11):** 100 Hosts Required
+* **General Department (VLAN 22):** 50 Hosts Required
+* **Business Department (VLAN 33):** 25 Hosts Required
 
-### 🏢 VLAN Mapping & Host Allocation
+### 🔄 B. VLAN Trunking Protocol (VTP) Domain Setup
+A VTP management framework was successfully implemented to automate database propagation from the central core switch down to the access-layer structural building blocks.
 
-| Block Location | Switch Name | Assigned VLAN | Department Name | Target Hosts | Connected Ports |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Pejabat Pentadbir** | `SW-PEJABAT` | VLAN 11 <br> VLAN 22 <br> VLAN 33 | Admin 11 <br> Admin 22 <br> Admin 33 | Management | `Fa0/6` <br> `Fa0/11` <br> `Fa0/1` |
-| **Blok 1** | `SW-BLOK1` | VLAN 11 | JTM (Teknologi Maklumat) | 100 Hosts | `Fa0/1`, `Fa0/5` |
-| **Blok 2** | `SW-BLOK2` | VLAN 22 <br> VLAN 33 | JU (Usahawan) <br> JP (Perniagaan) | 50 Hosts <br> 25 Hosts | `Fa0/4`, `Fa0/6` <br> `Fa0/15`, `Fa0/11` |
+| Switch Hostname | VTP Operational Mode | VTP Domain Name | VTP Authentication Password |
+| :--- | :--- | :--- | :--- |
+| `SW-PEJABAT` | **Server** | `City.com` | `City1234` |
+| `SW-BLOK1` | **Client** | `City.com` | `City1234` |
+| `SW-BLOK2` | **Client** | `City.com` | `City1234` |
 
-### 🔗 Backbone Trunk Links
-To allow traffic from all VLANs to travel between the switches, high-speed **802.1Q Trunk Links** were configured on the following interconnection ports:
-* **`SW-PEJABAT`** ➔ Connects to downstream switches via trunk ports **`Fa0/23`** and **`Fa0/24`**.
-* **`SW-BLOK1`** ➔ Uplinks to core via trunk port **`Fa0/23`**.
-* **`SW-BLOK2`** ➔ Uplinks to core via trunk port **`Fa0/24`**.
+### 🏢 C. VLAN Mapping & Port Assignments
 
----
-
-## 🧪 3. Connectivity Verification (Ping Tests)
-
-End-to-end communication was successfully verified using internet control message protocol (ICMP) echo requests between the administrative core and host nodes:
-
-| Source Node | Destination Node | Target IP Address | Test Result | Status |
+| Switch Hostname | Logical Interface Access Ports | Assigned VLAN ID | Department Name | Structural Role |
 | :--- | :--- | :--- | :--- | :--- |
-| **ADMIN 11** | PC 11 A | `192.168.0.5` | 4 Packets Sent, 4 Received (0% Loss) | ✅ SUCCESS |
-| **ADMIN 22** | PC 22 A | `192.168.0.133` | 4 Packets Sent, 4 Received (0% Loss) | ✅ SUCCESS |
-| **ADMIN 33** | PC 33 A | `192.168.0.197` | 4 Packets Sent, 4 Received (0% Loss) | ✅ SUCCESS |
+| **SW-PEJABAT** | `Fa0/1` <br> `Fa0/6` <br> `Fa0/11` | VLAN 11 <br> VLAN 22 <br> VLAN 33 | JTM <br> JU <br> JP | Admin 11 Core <br> Admin 22 Core <br> Admin 33 Core |
+| **SW-BLOK1** | `Fa0/1 - Fa0/5` | VLAN 11 | JTM | IT Department Hosts |
+| **SW-BLOK2** | `Fa0/6 - Fa0/10` <br> `Fa0/11 - Fa0/15` | VLAN 22 <br> VLAN 33 | JU <br> JP | General Dept Hosts <br> Business Dept Hosts |
+
+*Note: Inter-switch trunk lines linking `SW-PEJABAT` (via ports `Fa0/23` & `Fa0/24`) to the access layer switches are explicitly configured with standard **IEEE 802.1Q encapsulation**.*
 
 ---
 
-## 🔒 4. Applied Switch Security Protocols
-To match enterprise compliance requirements, the following security baseline parameters were applied directly via the Cisco IOS CLI:
-1. **Console Line Protection:** Secured with local authentication passwords.
-2. **Privileged Mode Security:** Configured `Enable Secret` hashing to protect configuration access.
-3. **Password Encryption:** Activated `service password-encryption` globally to prevent plain-text viewing within configuration files (`show run`).
-4. **VLAN Automation:** Configured **VTP (VLAN Trunking Protocol)** Domain Name, Modes, and Passwords to automatically update database files securely across the architecture.
+## 🔒 4. Switch Infrastructure Security Hardening
+To safeguard the local control and management planes, baseline infrastructure security parameters were deployed across all active switches via the Cisco IOS CLI:
+1. **Device Hostname Schema:** Configured systematically as `SW-PEJABAT`, `SW-BLOK1`, and `SW-BLOK2`.
+2. **Privileged EXEC Mode Hardening:** Protected with strong MD5 cryptographic hashing via the `enable secret EnCity` directive.
+3. **Physical Boundary Security:** Secured native asynchronous access points using a strict `line console 0` password string (`ConCity`).
+4. **Data Privacy Control:** Executed global `service password-encryption` parameters to eliminate plaintext configuration liabilities (`show running-config`).
+
+---
+
+## 🧪 5. End-to-End Connectivity Verification (Ping Validation)
+Layer 3 boundaries and logical VLAN segments were verified using native terminal command prompt utilities, resulting in **100% data transmission validation (0% packet loss)**:
+
+* **PING from ADMIN 11 ➔ PC 11 A** (`192.168.0.5`) ➔ **SUCCESSFUL ✅**
+* **PING from ADMIN 22 ➔ PC 22 A** (`192.168.0.133`) ➔ **SUCCESSFUL ✅**
+* **PING from ADMIN 33 ➔ PC 33 A** (`192.168.0.197`) ➔ **SUCCESSFUL ✅**
+
+---
+*Developed as part of the core practical assessment requirements for the DKB2332 Internetworking Protocols course, Diploma in Information Technology.*
